@@ -5,7 +5,12 @@ from solutions.common.input_reader import get_input_lines
 
 
 day_num = sys.argv[1]
-solution_module = import_module(f"solutions.day{day_num.zfill(2)}")
+if len(sys.argv) > 2:
+    implementation = sys.argv[2]
+else:
+    implementation = "alpha"
+
+solution_module = import_module(f"solutions.day{day_num.zfill(2)}.{implementation}")
 input_lines = get_input_lines(int(day_num))
 digester = getattr(solution_module, "digest_input", lambda x: x)
 digested_lines = digester(input_lines)
