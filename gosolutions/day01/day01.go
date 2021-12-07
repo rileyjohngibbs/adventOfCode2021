@@ -25,9 +25,16 @@ func main() {
         intified, _ := strconv.Atoi(s)
         depthInts[i] = intified
     }
-    count := 0
+
+    partOneCount := 0
     for i := 1; i < len(depthInts); i++ {
-        if depthInts[i] > depthInts[i - 1] { count++ }
+        if depthInts[i] > depthInts[i - 1] { partOneCount++ }
     }
-    fmt.Println(count)
+    fmt.Println(partOneCount)
+
+    partTwoCount := 0
+    for i := 3; i < len(depthInts); i++ {
+        if depthInts[i] > depthInts[i - 3] { partTwoCount++ }
+    }
+    fmt.Println(partTwoCount)
 }
