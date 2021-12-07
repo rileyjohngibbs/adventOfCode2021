@@ -39,7 +39,7 @@ def find_minimum(left: int, right: int, key: Callable[[int], int]) -> int:
             (guess + delta, key(guess + delta)) for delta in (-step_size, step_size)
         ]
         best_guess, best_guess_cost = next(
-            filter(lambda ng: ng[1] < guess_cost, new_guesses), (guess, guess_cost)
+            (ng for ng in new_guesses if ng[1] < guess_cost), (guess, guess_cost)
         )
         if best_guess != guess:
             guess = best_guess
