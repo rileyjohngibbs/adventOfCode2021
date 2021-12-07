@@ -25,7 +25,9 @@ def generate_fish(counts: dict[int, int], days_to_iterate: int) -> int:
         new_counts = {}
         for gestation, count in counts.items():
             if gestation == 0:
-                new_counts[GESTATION_DAYS - 1] = new_counts.get(GESTATION_DAYS - 1, 0) + count
+                new_counts[GESTATION_DAYS - 1] = (
+                    new_counts.get(GESTATION_DAYS - 1, 0) + count
+                )
                 new_counts[GESTATION_DAYS + MATURATION_DAYS - 1] = count
             else:
                 new_counts[gestation - 1] = new_counts.get(gestation - 1, 0) + count

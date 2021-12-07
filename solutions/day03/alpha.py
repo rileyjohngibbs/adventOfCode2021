@@ -4,7 +4,7 @@ from typing import Callable
 def part_one(input_lines: list[str]) -> int:
     gamma = int(get_most_common_bits(input_lines), 2)
     place_values = len(input_lines[0])
-    epsilon = 2**place_values - 1 - gamma
+    epsilon = 2 ** place_values - 1 - gamma
     return gamma * epsilon
 
 
@@ -18,7 +18,9 @@ def find_rating(candidates: list[str], keep_most_common: bool, index: int = 0) -
     if len(candidates) == 1:
         return candidates[0]
     zeros, ones = part_two_split(candidates, index)
-    filtered_candidates = ones if keep_most_common == (len(ones) >= len(zeros)) else zeros
+    filtered_candidates = (
+        ones if keep_most_common == (len(ones) >= len(zeros)) else zeros
+    )
     return find_rating(filtered_candidates, keep_most_common, index + 1)
 
 
@@ -31,10 +33,7 @@ def get_most_common_bits(input_lines: list[str]) -> str:
                 bit_counts[i] += 1
             else:
                 bit_counts[i] -= 1
-    most_common_bits = [
-        "1" if count >= 0 else "0"
-        for count in bit_counts
-    ]
+    most_common_bits = ["1" if count >= 0 else "0" for count in bit_counts]
     return "".join(most_common_bits)
 
 

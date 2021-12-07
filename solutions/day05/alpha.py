@@ -43,4 +43,4 @@ def interpolate(start: "Point", end: "Point") -> set["Point"]:
     length = max(abs(start.x - end.x), abs(start.y - end.y))
     dx = (end.x - start.x) // length
     dy = (end.y - start.y) // length
-    return {Point(start.x + dx*k, start.y + dy*k) for k in range(length)} | {end}
+    return {Point(start.x + dx * k, start.y + dy * k) for k in range(length)} | {end}

@@ -7,35 +7,22 @@ class BingoBoard:
     @property
     def wins(self) -> tuple[tuple[int, ...], ...]:
         return tuple(
-            tuple(range(x*self.SIZE, x*self.SIZE + self.SIZE))
+            tuple(range(x * self.SIZE, x * self.SIZE + self.SIZE))
             for x in range(self.SIZE)
         ) + tuple(
-            tuple(range(x, self.SIZE*self.SIZE, self.SIZE))
-            for x in range(self.SIZE)
+            tuple(range(x, self.SIZE * self.SIZE, self.SIZE)) for x in range(self.SIZE)
         )
 
     squares: list["BingoSquare"]
     reverse_lookup: dict[int, "BingoSquare"]
 
     def __init__(self, numbers: list[int]):
-        self.squares = [
-            BingoSquare(False, number)
-            for number in numbers
-        ]
-        self.reverse_lookup = {
-            number: square
-            for square, number in enumerate(numbers)
-        }
+        self.squares = [BingoSquare(False, number) for number in numbers]
+        self.reverse_lookup = {number: square for square, number in enumerate(numbers)}
 
     @property
     def winning_board(self):
-        return any(
-            all(
-                self.squares[position]
-                for position in win
-            )
-            for win in self.wins
-        )
+        return any(all(self.squares[position] for position in win) for win in self.wins)
 
     def mark(self, number: int) -> None:
         square = self.reverse_lookup.get(number)
@@ -44,11 +31,7 @@ class BingoBoard:
 
     @property
     def score(self) -> int:
-        return sum(
-            square.number
-            for square in self.squares
-            if not square
-        )
+        return sum(square.number for square in self.squares if not square)
 
 
 @dataclass

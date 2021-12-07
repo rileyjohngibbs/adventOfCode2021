@@ -7,7 +7,9 @@ def digest_input(input_lines: list[str]) -> list[int]:
 
 
 def part_one(positions: list[int]) -> int:
-    return find_minimum(min(positions), max(positions), partial(total_fuel_one, positions))
+    return find_minimum(
+        min(positions), max(positions), partial(total_fuel_one, positions)
+    )
 
 
 def total_fuel_one(positions: list[int], destination: int) -> int:
@@ -15,7 +17,9 @@ def total_fuel_one(positions: list[int], destination: int) -> int:
 
 
 def part_two(positions: list[int]) -> int:
-    return find_minimum(min(positions), max(positions), partial(total_fuel_two, positions))
+    return find_minimum(
+        min(positions), max(positions), partial(total_fuel_two, positions)
+    )
 
 
 def total_fuel_two(positions: list[int], destination: int) -> int:
@@ -32,10 +36,11 @@ def find_minimum(left: int, right: int, key: Callable[[int], int]) -> int:
     step_size = (right - guess) // 2
     while step_size >= 1:
         new_guesses = [
-            (guess + delta, key(guess + delta))
-            for delta in (-step_size, step_size)
+            (guess + delta, key(guess + delta)) for delta in (-step_size, step_size)
         ]
-        best_guess, best_guess_cost = next(filter(lambda ng: ng[1] < guess_cost, new_guesses), (guess, guess_cost))
+        best_guess, best_guess_cost = next(
+            filter(lambda ng: ng[1] < guess_cost, new_guesses), (guess, guess_cost)
+        )
         if best_guess != guess:
             guess = best_guess
             guess_cost = best_guess_cost
