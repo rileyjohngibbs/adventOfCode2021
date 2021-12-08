@@ -29,32 +29,50 @@ def solve_display(display: Display) -> int:
     four_arm = (
         next(pattern for pattern in display.signal_pattern if len(pattern) == 4) - one
     )
+    resolver = DigitResolver(one, four_arm)
 
     solved_output = 0
     for output_value in display.output_values:
-        if len(output_value) == 2:
+        digit = resolver.resolve(output_value)
+        solved_output = 10 * solved_output + digit
+    return solved_output
+
+
+class DigitResolver:
+    """
+    Uses the pattern for the digit 1 and the "arm" of the digit 4 to solve any other
+    signal pattern.
+
+    The "arm" of the digit 4 is the two signals in 4 that are not in 1.
+    """
+
+    def __init__(self, one: set[str], four_arm: set[str]):
+        self.one = one
+        self.four_arm = four_arm
+
+    def resolve(self, pattern: set[str]) -> int:
+        if len(pattern) == 2:
             digit = 1
-        elif len(output_value) == 3:
+        elif len(pattern) == 3:
             digit = 7
-        elif len(output_value) == 4:
+        elif len(pattern) == 4:
             digit = 4
-        elif len(output_value) == 5:
+        elif len(pattern) == 5:
             # 2, 3, 5
-            if one & output_value == one:
+            if self.one & pattern == self.one:
                 digit = 3
-            elif four_arm & output_value == four_arm:
+            elif self.four_arm & pattern == self.four_arm:
                 digit = 5
             else:
                 digit = 2
-        elif len(output_value) == 6:
+        elif len(pattern) == 6:
             # 6, 9, 0
-            if one & output_value != one:
+            if self.one & pattern != self.one:
                 digit = 6
-            elif four_arm & output_value != four_arm:
+            elif self.four_arm & pattern != self.four_arm:
                 digit = 0
             else:
                 digit = 9
-        elif len(output_value) == 7:
+        elif len(pattern) == 7:
             digit = 8
-        solved_output = 10 * solved_output + digit
-    return solved_output
+        return digit
