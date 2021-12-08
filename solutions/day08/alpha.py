@@ -67,16 +67,20 @@ def solve_signal_pattern(signal_pattern: list[str]) -> dict[frozenset[str], int]
 
     inf_loop_watcher = 0
     while not all(len(render_codes) == 1 for render_codes in matrix.values()):
+        # Probably could lower this threshold but it doesn't matter
+        if inf_loop_watcher > 30:
+            raise Exception("Unable to solbe: this is probably an infinite loop")
+
         for code, render_codes in matrix.items():
             if len(render_codes) == 1:
                 for other_code, other_render_codes in matrix.items():
                     if other_code != code:
                         other_render_codes -= render_codes
             if len(render_codes) == 0:
-                raise Exception(f"Unable to solve: no possible solutions remain for {code}")
+                raise Exception(
+                    f"Unable to solve: no possible solutions remain for {code}"
+                )
         inf_loop_watcher += 1
-        if inf_loop_watcher > 30:  # Probably could lower this threshold but it doesn't matter
-            raise Exception("Unable to solbe: this is probably an infinite loop")
 
     solution = {}
     for signal in signal_pattern:
