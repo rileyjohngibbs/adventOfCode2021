@@ -1,6 +1,3 @@
-from typing import Callable
-
-
 def part_one(input_lines: list[str]) -> int:
     gamma = int(get_most_common_bits(input_lines), 2)
     place_values = len(input_lines[0])
