@@ -21,4 +21,4 @@ print(f"Part One: {solution_one}")
 
 part_two = getattr(solution_module, "part_two", lambda x: "(solution pending)")
 solution_two = part_two(digested_lines)
-print(f"Part One: {solution_two}")
+print(f"Part Two: {solution_two}")
