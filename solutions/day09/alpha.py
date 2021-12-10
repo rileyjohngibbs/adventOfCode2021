@@ -50,7 +50,6 @@ def part_two(grid_values: list[list[int]]) -> int:
                     basin |= frontier
                     basined_values |= frontier
                 basin_sizes.append(len(basin))
-                print((ri, ci), len(basin))
     largest_basins = sorted(basin_sizes)[-3:]
     basin_product = 1
     for basin_size in largest_basins:
