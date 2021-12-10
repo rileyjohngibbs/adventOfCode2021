@@ -2,16 +2,22 @@ from dataclasses import dataclass
 
 
 def digest_input(input_lines: list[str]) -> list[tuple["Point", "Point"]]:
-    return [
-        tuple(Point(*map(int, xy.split(","))) for xy in line.split(" -> "))
-        for line in input_lines
-    ]
+    digested = []
+    for line in input_lines:
+        start, end = line.split(" -> ", 1)
+        digested.append((Point.from_string(start), Point.from_string(end)))
+    return digested
 
 
 @dataclass(frozen=True)
 class Point:
     x: int
     y: int
+
+    @classmethod
+    def from_string(cls, string_address: str) -> "Point":
+        x, y = string_address.split(",", 1)
+        return cls(int(x), int(y))
 
 
 def part_one(vents: list[tuple["Point", "Point"]]) -> int:
