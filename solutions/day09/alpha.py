@@ -53,8 +53,8 @@ def part_two(grid_values: list[list[int]]) -> int:
                 print((ri, ci), len(basin))
     largest_basins = sorted(basin_sizes)[-3:]
     basin_product = 1
-    for basin in largest_basins:
-        basin_product *= basin
+    for basin_size in largest_basins:
+        basin_product *= basin_size
     return basin_product
 
 
