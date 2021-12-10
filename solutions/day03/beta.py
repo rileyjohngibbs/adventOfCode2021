@@ -1,34 +1,43 @@
+from dataclasses import dataclass
+
+
 def part_two(input_lines: list[str]) -> int:
-    tree = [0, {}]
+    tree = Tree(0, {})
     for line in input_lines:
         leaf = tree
         for bit in line:
-            leaf[0] += 1
-            leaf = leaf[1].setdefault(bit, [0, {}])
-        leaf[0] += 1
+            leaf.count += 1
+            leaf = leaf.bit_branches.setdefault(bit, Tree(0, {}))
+        leaf.count += 1
 
     oxygen = ""
     leaf = tree
-    while leaf[1]:
-        bit, leaf = max(leaf[1].items(), key=rating_key)
+    while leaf.bit_branches:
+        bit, leaf = max(leaf.bit_branches.items(), key=rating_key)
         oxygen += bit
 
     cotwo = ""
     leaf = tree
-    while leaf[1]:
-        bit, leaf = min(leaf[1].items(), key=rating_key)
+    while leaf.bit_branches:
+        bit, leaf = min(leaf.bit_branches.items(), key=rating_key)
         cotwo += bit
 
     return int(oxygen, 2) * int(cotwo, 2)
 
 
-def rating_key(key_value):
+@dataclass
+class Tree:
+    count: int
+    bit_branches: dict[str, "Tree"]
+
+
+def rating_key(key_value: tuple[str, Tree]):
     key, value = key_value
-    return value[0], key == "1"
+    return value.count, key == "1"
 
 
 def test_rating_key():
-    assert rating_key(("0", [1, {}])) < rating_key(("1", [1, {}]))
+    assert rating_key(("0", Tree(1, {}))) < rating_key(("1", Tree(1, {})))
 
 
 def test_given_part_two():
