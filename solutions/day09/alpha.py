@@ -2,10 +2,7 @@ from typing import Optional
 
 
 def digest_input(input_lines: list[str]) -> list[list[int]]:
-    return [
-        [int(digit) for digit in row]
-        for row in input_lines
-    ]
+    return [[int(digit) for digit in row] for row in input_lines]
 
 
 def part_one(grid: list[list[int]]) -> int:
@@ -44,8 +41,7 @@ def part_two(grid_values: list[list[int]]) -> int:
                         neighbor
                         for ri, ci, _ in frontier
                         for neighbor in grid.neighbors(ri, ci)
-                        if neighbor[2] != 9
-                        and neighbor not in basin
+                        if neighbor[2] != 9 and neighbor not in basin
                     }
                     basin |= frontier
                     basined_values |= frontier
@@ -65,25 +61,43 @@ class Grid:
         """Returns row, column, value"""
         if column_index == 0:
             return None
-        return (row_index, column_index - 1, self.grid_values[row_index][column_index - 1])
+        return (
+            row_index,
+            column_index - 1,
+            self.grid_values[row_index][column_index - 1],
+        )
 
-    def right(self, row_index: int, column_index: int) -> Optional[tuple[int, int, int]]:
+    def right(
+        self, row_index: int, column_index: int
+    ) -> Optional[tuple[int, int, int]]:
         """Returns row, column, value"""
         if column_index == len(self.grid_values[row_index]) - 1:
             return None
-        return (row_index, column_index + 1, self.grid_values[row_index][column_index + 1])
+        return (
+            row_index,
+            column_index + 1,
+            self.grid_values[row_index][column_index + 1],
+        )
 
     def up(self, row_index: int, column_index: int) -> Optional[tuple[int, int, int]]:
         """Returns row, column, value"""
         if row_index == 0:
             return None
-        return (row_index - 1, column_index, self.grid_values[row_index - 1][column_index])
+        return (
+            row_index - 1,
+            column_index,
+            self.grid_values[row_index - 1][column_index],
+        )
 
     def down(self, row_index: int, column_index: int) -> Optional[tuple[int, int, int]]:
         """Returns row, column, value"""
         if row_index == len(self.grid_values) - 1:
             return None
-        return (row_index + 1, column_index, self.grid_values[row_index + 1][column_index])
+        return (
+            row_index + 1,
+            column_index,
+            self.grid_values[row_index + 1][column_index],
+        )
 
     def neighbors(self, row_index: int, column_index: int) -> set[tuple[int, int, int]]:
         return {

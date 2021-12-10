@@ -3,10 +3,7 @@ from itertools import product
 
 
 def digest_input(input_lines: list[str]) -> list[list[int]]:
-    return [
-        [int(digit) for digit in row]
-        for row in input_lines
-    ]
+    return [[int(digit) for digit in row] for row in input_lines]
 
 
 def part_two(grid: list[list[int]]) -> int:
@@ -27,15 +24,20 @@ def part_two(grid: list[list[int]]) -> int:
         if not frontier:
             continue
         candidate = frontier.pop()
-        if candidate not in unvisited_addresses or grid[candidate[0]][candidate[1]] == 9:
+        if (
+            candidate not in unvisited_addresses
+            or grid[candidate[0]][candidate[1]] == 9
+        ):
             continue
         current_basin.add(candidate)
         unvisited_addresses.remove(candidate)
-        frontier.update({
-            (candidate[0], candidate[1] - 1),
-            (candidate[0], candidate[1] + 1),
-            (candidate[0] - 1, candidate[1]),
-            (candidate[0] + 1, candidate[1]),
-        })
+        frontier.update(
+            {
+                (candidate[0], candidate[1] - 1),
+                (candidate[0], candidate[1] + 1),
+                (candidate[0] - 1, candidate[1]),
+                (candidate[0] + 1, candidate[1]),
+            }
+        )
     top_three = sorted(list(map(len, basins)))[-3:]
     return reduce(lambda a, b: a * b, top_three)
