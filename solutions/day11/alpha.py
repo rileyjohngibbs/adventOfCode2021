@@ -73,13 +73,13 @@ class OctopodesGrid:
             self.value_addresses[octo_value + 1].add(address)
 
     def render(self) -> str:
-        print_grid = [
+        print_grid: list[list[str]] = [
             ["." for _ in range(self.dimensions[1])] for _ in range(self.dimensions[0])
         ]
         for value, addresses in self.value_addresses.items():
-            for address in addresses:
-                print_grid[address[0]][address[1]] = value
-        return "\n".join("".join(str(octo) for octo in row) for row in print_grid)
+            for row, column in addresses:
+                print_grid[row][column] = str(value)
+        return "\n".join("".join(octo for octo in row) for row in print_grid)
 
 
 PART_ONE_TEST_INPUT = [
