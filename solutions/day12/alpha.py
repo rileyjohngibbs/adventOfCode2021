@@ -14,11 +14,12 @@ def part_one(nodes: dict[str, set[str]]) -> int:
     return len(build_paths_to_end(nodes, ["start"]))
 
 
-def build_paths_to_end(nodes: dict[str, set[str]], base: list[str], can_double: bool = False) -> list[list[str]]:
+def build_paths_to_end(
+    nodes: dict[str, set[str]], base: list[str], can_double: bool = False
+) -> list[list[str]]:
     if base[-1] == "end":
         return [base]
     paths = []
-    large_caves, small_caves = [], []
     for branch in nodes[base[-1]]:
         if branch.isupper() or branch not in base:
             paths.extend(build_paths_to_end(nodes, base + [branch], can_double))
