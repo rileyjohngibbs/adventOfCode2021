@@ -14,7 +14,7 @@ class BingoBoard:
         )
 
     squares: list["BingoSquare"]
-    reverse_lookup: dict[int, "BingoSquare"]
+    reverse_lookup: dict[int, int]
 
     def __init__(self, numbers: list[int]):
         self.squares = [BingoSquare(False, number) for number in numbers]
@@ -67,6 +67,8 @@ def part_one(game: tuple[list[int], list["BingoBoard"]]) -> int:
         winning_board = next((b for b in boards if b.winning_board), None)
         if winning_board is not None:
             break
+    if winning_board is None:
+        raise Exception("No winning board found")
     score = winning_board.score * call
     return score
 
