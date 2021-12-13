@@ -24,12 +24,7 @@ class Entry:
 
 def digest_input(input_lines: list[str]) -> list["Entry"]:
     return [
-        Entry(
-            *[
-                group.split(" ")
-                for group in match.groups()
-            ]
-        )
+        Entry(*[group.split(" ") for group in match.groups()])
         for input_line in input_lines
         if (match := re.match(r"(.*) \| (.*)", input_line)) is not None
     ]

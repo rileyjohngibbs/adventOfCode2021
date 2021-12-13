@@ -73,8 +73,7 @@ def part_two(points_folds: tuple[list["Point"], list["Fold"]]) -> str:
     width, height = (max(p.x for p in points) + 1, max(p.y for p in points) + 1)
     display_string = "\n".join(
         "".join(
-            f"{BOLD}⌼⌼{PLAIN}" if Point(x, y) in points else ".."
-            for x in range(width)
+            f"{BOLD}⌼⌼{PLAIN}" if Point(x, y) in points else ".." for x in range(width)
         )
         for y in range(height)
     )
