@@ -3,6 +3,10 @@ from enum import Enum
 import pytest
 
 
+BOLD = "\033[1m"
+PLAIN = "\033[0m"
+
+
 def digest_input(input_lines: list[str]) -> tuple[list["Point"], list["Fold"]]:
     points, folds = [], []
     section = "points"
@@ -58,7 +62,7 @@ def part_one(points_folds: tuple[list["Point"], list["Fold"]]) -> int:
     return len(points)
 
 
-def part_two(points_folds: tuple[list["Point"], list["Fold"]]) -> None:
+def part_two(points_folds: tuple[list["Point"], list["Fold"]]) -> str:
     points = set(points_folds[0])
     folds = points_folds[1]
     for fold in folds:
@@ -67,14 +71,14 @@ def part_two(points_folds: tuple[list["Point"], list["Fold"]]) -> None:
             points.remove(point)
             points.add(reflect(point, fold))
     width, height = (max(p.x for p in points) + 1, max(p.y for p in points) + 1)
-    for y in range(height):
-        for x in range(width):
-            if Point(x, y) in points:
-                print("#", end="")
-            else:
-                print(".", end="")
-        print()
-    return None
+    display_string = "\n".join(
+        "".join(
+            f"{BOLD}⌼⌼{PLAIN}" if Point(x, y) in points else ".."
+            for x in range(width)
+        )
+        for y in range(height)
+    )
+    return f"\n{display_string}"
 
 
 def reflect(point: "Point", fold: "Fold") -> "Point":
