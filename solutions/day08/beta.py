@@ -10,13 +10,9 @@ class Display:
 
 def digest_input(input_lines: list[str]) -> list["Display"]:
     return [
-        Display(
-            *[
-                [set(x) for x in group.split(" ")]
-                for group in re.match(r"(.*) \| (.*)", input_line).groups()
-            ]
-        )
+        Display(*[[set(x) for x in group.split(" ")] for group in match.groups()])
         for input_line in input_lines
+        if (match := re.match(r"(.*) \| (.*)", input_line)) is not None
     ]
 
 
