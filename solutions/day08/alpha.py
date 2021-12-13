@@ -27,10 +27,11 @@ def digest_input(input_lines: list[str]) -> list["Entry"]:
         Entry(
             *[
                 group.split(" ")
-                for group in re.match(r"(.*) \| (.*)", input_line).groups()
+                for group in match.groups()
             ]
         )
         for input_line in input_lines
+        if (match := re.match(r"(.*) \| (.*)", input_line)) is not None
     ]
 
 
@@ -45,7 +46,7 @@ def part_one(entries: list["Entry"]) -> int:
 def part_two(entries: list["Entry"]) -> int:
     output_value_sum = 0
     for entry in entries:
-        solution: dict[str, int] = solve_signal_pattern(entry.signal_pattern)
+        solution: dict[frozenset[str], int] = solve_signal_pattern(entry.signal_pattern)
         output_value_sum += int(
             "".join(str(solution[frozenset(value)]) for value in entry.output_values)
         )
@@ -56,7 +57,9 @@ def solve_signal_pattern(signal_pattern: list[str]) -> dict[frozenset[str], int]
     matrix: dict[str, set[str]] = {a: set(SIGNAL_CODES) for a in SIGNAL_CODES}
     for signal in signal_pattern:
         candidate_renders = get_candidate_renders(signal)
-        uncommon_render_codes = set().union(*candidate_renders)
+        uncommon_render_codes: set[str] = set()
+        for candidate in candidate_renders:
+            uncommon_render_codes |= candidate
         for code in signal:
             matrix[code] &= uncommon_render_codes
         common_render_codes = set(SIGNAL_CODES).intersection(*candidate_renders)
