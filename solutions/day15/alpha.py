@@ -35,44 +35,39 @@ class Position:
 
 
 class Path:
-    positions: list["Position"]
+    addresses: set[tuple[int, int]]
     risk: int
+    tail: "Position"
 
-    def __init__(self, positions: list[Position], risk: Optional[int] = None):
-        self.positions = positions
-        self.risk = risk if risk is not None else sum(p.risk for p in positions)
+    def __init__(self, addresses: set[tuple[int, int]], tail: "Position", risk: int = 0):
+        self.risk = risk
+        self.addresses = addresses
+        self.tail = tail
 
     def __repr__(self) -> str:
-        start = self.positions[0]
-        end = self.positions[-1]
-        if len(self.positions) < 3:
-            return f"Path<({start.x}, {start.y}), ({end.x}, {end.y})>"
         return (
-            f"Path<({start.x}, {start.y}), "
-            f"[{len(self.positions) - 2}], "
-            f"({end.x}, {end.y})>"
+            f"Path<"
+            f"[{len(self.addresses) - 2}], "
+            f"({self.tail.x}, {self.tail.y})>"
         )
 
-    @property
-    def tail(self) -> "Position":
-        return self.positions[-1]
-
     def copy(self, new_position: "Position") -> "Path":
-        new_path = Path(self.positions[:], self.risk)
+        new_path = Path(self.addresses.copy(), self.tail, self.risk)
         new_path.append(new_position)
         return new_path
 
     def append(self, position: "Position"):
-        if position not in self.positions[-1].neighbors:
+        if position not in self.tail.neighbors:
             raise ValueError(
                 f"{position} not a valid neighbor of "
-                f"{self.positions[-1]} at end of path"
+                f"{self.tail} at end of path"
             )
-        self.positions.append(position)
+        self.tail = position
+        self.addresses.add(position.address)
         self.risk += position.risk
 
     def next_positions(self) -> Iterator["Position"]:
-        return (n for n in self.tail.neighbors if n not in self.positions)
+        return (n for n in self.tail.neighbors if n.address not in self.addresses)
 
 
 def digest_input(input_lines: list[str]) -> list[Position]:
@@ -110,12 +105,12 @@ class Pathfinder:
             p.address: self.size for p in positions
         }
         self.visited[self.start.address] = 0
-        self.paths = [Path([self.start], 0)]
+        self.paths = [Path({self.start.address}, self.start, 0)]
 
     def heuristic(self, path: Path) -> int:
         return path.risk + (self.end.y - path.tail.y + self.end.x - path.tail.x)
 
-    def seek_least_risk_to_end(self):
+    def seek_least_risk_to_end(self, report: bool = False):
         time_start = time.time()
         count = 0
         done = False
@@ -126,14 +121,15 @@ class Pathfinder:
             for exp in expansions:
                 sorted_insert(self.paths, exp, self.heuristic)
             done = any(exp.tail == self.end for exp in expansions)
-            count += 1
-            if count % 1000 == 0:
-                reset = time.time()
-                print(
-                    f"Iterations: {count}; Paths: {len(self.paths)}; "
-                    f"Time delta: {reset - time_start}"
-                )
-                time_start = reset
+            if report:
+                count += 1
+                if count % 1000 == 0:
+                    reset = time.time()
+                    print(
+                        f"Iterations: {count}; Paths: {len(self.paths)}; "
+                        f"Time delta: {reset - time_start}"
+                    )
+                    time_start = reset
 
     def get_risk_to_end(self) -> int:
         path_to_end = next((p for p in self.paths if p.tail == self.end), None)
