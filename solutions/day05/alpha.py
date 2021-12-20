@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from solutions.common.point import Point
 
 
 def digest_input(input_lines: list[str]) -> list[tuple["Point", "Point"]]:
@@ -7,17 +7,6 @@ def digest_input(input_lines: list[str]) -> list[tuple["Point", "Point"]]:
         start, end = line.split(" -> ", 1)
         digested.append((Point.from_string(start), Point.from_string(end)))
     return digested
-
-
-@dataclass(frozen=True)
-class Point:
-    x: int
-    y: int
-
-    @classmethod
-    def from_string(cls, string_address: str) -> "Point":
-        x, y = string_address.split(",", 1)
-        return cls(int(x), int(y))
 
 
 def part_one(vents: list[tuple["Point", "Point"]]) -> int:
