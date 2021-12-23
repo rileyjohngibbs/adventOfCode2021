@@ -39,16 +39,16 @@ class Path:
     risk: int
     tail: "Position"
 
-    def __init__(self, addresses: set[tuple[int, int]], tail: "Position", risk: int = 0):
+    def __init__(
+        self, addresses: set[tuple[int, int]], tail: "Position", risk: int = 0
+    ):
         self.risk = risk
         self.addresses = addresses
         self.tail = tail
 
     def __repr__(self) -> str:
         return (
-            f"Path<"
-            f"[{len(self.addresses) - 2}], "
-            f"({self.tail.x}, {self.tail.y})>"
+            f"Path<" f"[{len(self.addresses) - 2}], " f"({self.tail.x}, {self.tail.y})>"
         )
 
     def copy(self, new_position: "Position") -> "Path":
@@ -59,8 +59,7 @@ class Path:
     def append(self, position: "Position"):
         if position not in self.tail.neighbors:
             raise ValueError(
-                f"{position} not a valid neighbor of "
-                f"{self.tail} at end of path"
+                f"{position} not a valid neighbor of " f"{self.tail} at end of path"
             )
         self.tail = position
         self.addresses.add(position.address)

@@ -40,7 +40,7 @@ class ShotResult(Enum):
 
 def calculate_minimum_x_velocity(left_bound: int) -> int:
     x = 0
-    while (x**2 + x) / 2 < left_bound:
+    while (x ** 2 + x) / 2 < left_bound:
         x += 1
     return x
 

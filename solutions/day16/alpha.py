@@ -42,9 +42,9 @@ def part_two(bit_string: str) -> int:
 
 def parse_next_packet(bits) -> tuple["Packet", int]:
     index = 0
-    version = int(bits[index:index + 3], 2)
+    version = int(bits[index : index + 3], 2)
     index += 3
-    operator_code = int(bits[index:index + 3], 2)
+    operator_code = int(bits[index : index + 3], 2)
     index += 3
     packet_class: type[Packet]
     if operator_code == 4:
@@ -67,13 +67,16 @@ class Packet(ABC):
         self.operator = operator
 
     @abstractmethod
-    def version_sum(self) -> int: ...
+    def version_sum(self) -> int:
+        ...
 
     @abstractmethod
-    def parse_body(self, bits: str) -> int: ...
+    def parse_body(self, bits: str) -> int:
+        ...
 
     @abstractmethod
-    def evaluate(self) -> int: ...
+    def evaluate(self) -> int:
+        ...
 
 
 class Literal(Packet):
@@ -96,7 +99,7 @@ class Literal(Packet):
         self.value = 0
         while not last_group:
             last_group = bits[index] == "0"
-            self.value = 16 * self.value + int(bits[index + 1:index + 5], 2)
+            self.value = 16 * self.value + int(bits[index + 1 : index + 5], 2)
             index += 5
         return index
 
@@ -152,7 +155,7 @@ class OperationPacket(Packet):
                 self.sub_packets.append(packet)
                 index += index_bump
         return index
-        
+
 
 """
 GRAMMAR
@@ -187,12 +190,16 @@ EXAMPLE_B = ["620080001611562C8802118E34"]
 EXAMPLE_C = ["C0015000016115A2E0802F182340"]
 EXAMPLE_D = ["A0016C880162017C3686B18A3D4780"]
 
-@pytest.mark.parametrize("hexstring, version_sum", [
-    (EXAMPLE_A, 16),
-    (EXAMPLE_B, 12),
-    (EXAMPLE_C, 23),
-    (EXAMPLE_D, 31),
-])
+
+@pytest.mark.parametrize(
+    "hexstring, version_sum",
+    [
+        (EXAMPLE_A, 16),
+        (EXAMPLE_B, 12),
+        (EXAMPLE_C, 23),
+        (EXAMPLE_D, 31),
+    ],
+)
 def test_part_one(hexstring, version_sum):
     assert part_one(digest_input(hexstring)) == version_sum
 
@@ -215,36 +222,11 @@ def test_part_two(hexstring, value):
     assert part_two(digest_input(hexstring)) == value
 
 
-LITERAL_8 = (
-    "000"
-    "100"
-    "01000"
-)
-LITERAL_4 = (
-    "000"
-    "100"
-    "00100"
-)
-SUM_12 = (
-    "000"
-    "000"
-    "1"
-    "00000000010"
-    + LITERAL_8 + LITERAL_4
-)
-SUM_24 = (
-    "000"
-    "000"
-    "1"
-    "00000000010"
-    + SUM_12 + SUM_12
-)
-LITERAL_44 = (
-    "000"
-    "100"
-    "10010"
-    "01100"
-)
+LITERAL_8 = "000" "100" "01000"
+LITERAL_4 = "000" "100" "00100"
+SUM_12 = "000" "000" "1" "00000000010" + LITERAL_8 + LITERAL_4
+SUM_24 = "000" "000" "1" "00000000010" + SUM_12 + SUM_12
+LITERAL_44 = "000" "100" "10010" "01100"
 TEST_PACKETS = [
     (LITERAL_8, Operator.LITERAL, 8),
     (LITERAL_4, Operator.LITERAL, 4),
